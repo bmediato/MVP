@@ -9,7 +9,6 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="13.0.1" />
 		<PackageReference Include="MediatR" Version="12.3.0" />
-		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.6.2" />
@@ -18,8 +17,9 @@
 	</ItemGroup>
 	
   <ItemGroup>
-    <Folder Include="Interfaces\" />
     <Folder Include="Enums\" />
+    <Folder Include="Interfaces\v1\Services\Restaurants\" />
+    <Folder Include="Services\v1\Restaurants\" />
   </ItemGroup>
 
 </Project>
