@@ -1,8 +1,8 @@
-﻿namespace Domain.Commands.v1.User.Save;
+﻿namespace Domain.Dtos.v1.User;
 
-public class UserSaveCommandResponse
+public class UserDtoResponse
 {
-    public UserSaveCommandResponse Error(string message)
+    public UserDtoResponse Error(string message)
     {
         Success = false;
         Message = message;
