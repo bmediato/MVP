@@ -1,6 +1,4 @@
-﻿using Domain.Interfaces.v1.Configurations;
-
-namespace Infrastructure.Data.v1.MongoDb.Repositories.User;
+﻿namespace Infrastructure.Data.v1.MongoDb.Repositories.User;
 
 public class UserRepository : IUserMongoDbRepository 
 {

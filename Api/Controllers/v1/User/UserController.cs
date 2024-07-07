@@ -1,7 +1,4 @@
-﻿using Domain.Dtos.v1.User;
-using Domain.Interfaces.v1.Services.User;
-
-namespace Api.Controllers.v1.Login;
+﻿namespace Api.Controllers.v1.Login;
 
 /// <summary>
 /// UserController
@@ -10,21 +7,29 @@ namespace Api.Controllers.v1.Login;
 [ApiController]
 public class UserController : Controller
 {
-    private readonly IUserService _service;
+    private readonly IUserSaveHandlerService _userService;
 
-    public UserController(IUserService service)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UserController"/> class!
+    /// </summary>
+    /// <param name="IUserService">The UserService.</param>
+    public UserController(IUserSaveHandlerService userService)
     {
-        _service = service;
+        _userService = userService;
     }
 
+    /// <summary>
+    /// Save users v1.
+    /// </summary>
+    /// <param name="request">The User request</param>
     [HttpPost("save")]
     [ProducesResponseType(typeof(UserSaveCommandResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> SaveUser([FromBody] UserDto request)
+    public async Task<IActionResult> SaveUser([FromBody] UserSaveCommand request)
     {
         try
         {
-            var user = await _service.SaveUserAsync(new UserDto(request.UserName, request.Email, request.Password, request.Address, request.PhoneNumber));
+            var user = await _userService.SaveUserAsync(new UserSaveCommand(request.UserName, request.Email, request.Password, request.Address, request.PhoneNumber));
             return Ok(user);
         }
         catch (Exception ex)

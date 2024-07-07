@@ -1,4 +1,13 @@
-﻿global using Domain.Commands.v1.User.Save;
-global using MediatR;
+﻿global using Api;
+global using AutoMapper;
+global using Domain.Commands.v1.User.Save;
+global using Domain.Interfaces.v1.Configurations;
+global using Domain.Interfaces.v1.Repositories.MongoDb.User;
+global using Domain.Interfaces.v1.Services.User;
+global using Domain.Profiles.v1.User;
+global using FluentValidation;
+global using Infrastructure.Data.v1.MongoDb.Repositories.User;
 global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.Extensions.Options;
+global using Microsoft.OpenApi.Models;
 global using System.Net;
