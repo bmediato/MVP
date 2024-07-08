@@ -1,11 +1,16 @@
 ﻿global using Api;
 global using AutoMapper;
+global using Domain.Commands.v1.Restaurants.Save;
 global using Domain.Commands.v1.User.Save;
 global using Domain.Interfaces.v1.Configurations;
+global using Domain.Interfaces.v1.Repositories.MongoDb.Restaurant;
 global using Domain.Interfaces.v1.Repositories.MongoDb.User;
+global using Domain.Interfaces.v1.Services.Restaurants;
 global using Domain.Interfaces.v1.Services.User;
+global using Domain.Profiles.v1.Restaurant;
 global using Domain.Profiles.v1.User;
 global using FluentValidation;
+global using Infrastructure.Data.v1.MongoDb.Repositories.Restaurants;
 global using Infrastructure.Data.v1.MongoDb.Repositories.User;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.Extensions.Options;

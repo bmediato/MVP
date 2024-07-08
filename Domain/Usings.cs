@@ -1,6 +1,13 @@
 ﻿global using AutoMapper;
+global using Domain.Commands.v1.Restaurants.Save;
 global using Domain.Commands.v1.User.Save;
+global using Domain.Entities.v1.MongoDb.Restaurants;
 global using Domain.Entities.v1.MongoDb.User;
+global using Domain.Enums.v1;
+global using Domain.Interfaces.v1.Repositories.MongoDb.Restaurant;
 global using Domain.Interfaces.v1.Repositories.MongoDb.User;
+global using Domain.Interfaces.v1.Services.Restaurants;
+global using Domain.Interfaces.v1.Services.User;
 global using FluentValidation;
+global using FluentValidation.Results;
 global using Microsoft.Extensions.Logging;

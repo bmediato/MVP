@@ -14,15 +14,20 @@ public class Startup
         services.AddSingleton<IDatabaseConfig>(sp => sp.GetRequiredService<IOptions<DatabaseConfig>>().Value);
 
         services.AddScoped<IUserMongoDbRepository, UserRepository>();
+        services.AddScoped<IRestaurantMongoDbRepository, RestaurantRepository>();
         services.AddScoped<IUserSaveHandlerService, UserSaveCommandHandler>();
+        services.AddScoped<IRestaurantSaveHandlerService, RestaurantsSaveCommandHandler>();
         services.AddTransient<IValidator<UserSaveCommand>, UserSaveCommandValidator>();
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         IMapper mapper = new UserProfile().Configuration().CreateMapper();
         services.AddSingleton(mapper);
 
+        IMapper mapperRest = new RestaurantProfile().Configuration().CreateMapper();
+        services.AddSingleton(mapperRest);
+
         services.AddTransient<IUserMongoDbRepository, UserRepository>();
-        services.AddScoped<IUserSaveHandlerService, UserSaveCommandHandler>();
+        services.AddTransient<IRestaurantMongoDbRepository, RestaurantRepository>();
 
         services.AddSwaggerGen(c =>
         {
