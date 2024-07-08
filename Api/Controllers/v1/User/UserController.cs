@@ -29,7 +29,7 @@ public class UserController : Controller
     {
         try
         {
-            var user = await _userService.SaveUserAsync(new UserSaveCommand(request.UserName, request.Email, request.Password, request.Address, request.PhoneNumber));
+            var user = await _userService.SaveAsync(new UserSaveCommand(request.UserName, request.Email, request.Password, request.Address, request.PhoneNumber));
             return Ok(user);
         }
         catch (Exception ex)

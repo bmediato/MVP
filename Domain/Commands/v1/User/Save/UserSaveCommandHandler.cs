@@ -1,7 +1,4 @@
-﻿using Domain.Interfaces.v1.Services.User;
-using FluentValidation.Results;
-
-namespace Domain.Commands.v1.User.Save;
+﻿namespace Domain.Commands.v1.User.Save;
 
 public class UserSaveCommandHandler : IUserSaveHandlerService
 {
@@ -22,7 +19,7 @@ public class UserSaveCommandHandler : IUserSaveHandlerService
         _userValidator = userValidator;
     }
 
-    public async Task<UserSaveCommandResponse> SaveUserAsync(UserSaveCommand command)
+    public async Task<UserSaveCommandResponse> SaveAsync(UserSaveCommand command)
     {
         var response = new UserSaveCommandResponse();
 

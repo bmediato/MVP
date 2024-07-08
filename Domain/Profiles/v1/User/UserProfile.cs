@@ -3,16 +3,13 @@
 public class UserProfile : Profile
 {
 
-    public UserProfile()
-    {
-
-    }
+    public UserProfile() { }
 
     public MapperConfiguration Configuration()
     {
         return new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<UserSaveCommand, UserMongoDb>();
+            cfg.CreateMap<UserSaveCommand, UserMongoDb>(); //Command to Mongo
         });
     }
 }
