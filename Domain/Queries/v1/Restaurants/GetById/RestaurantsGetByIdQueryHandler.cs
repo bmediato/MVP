@@ -1,6 +1,6 @@
 ﻿namespace Domain.Queries.v1.Restaurants.GetById;
 
-public class RestaurantsGetByIdQueryHandler : IRestaurantGetByIdHandlerService
+public class RestaurantsGetByIdQueryHandler : IRequestHandler<RestaurantsGetByIdQuery, RestaurantsGetByIdQueryResponse>
 {
     private readonly IMapper _mapper;
     private readonly ILogger<RestaurantsGetByIdQueryHandler> _logger;
@@ -15,7 +15,7 @@ public class RestaurantsGetByIdQueryHandler : IRestaurantGetByIdHandlerService
         _restaurantMongoDbRepository = restaurantMongoDbRepository;
     }
 
-    public async Task<RestaurantsGetByIdQueryResponse> GetByIdAsync(RestaurantsGetByIdQuery request)
+    public async Task<RestaurantsGetByIdQueryResponse> Handle(RestaurantsGetByIdQuery request, CancellationToken cancellationToken)
     {
         try
         {
@@ -23,17 +23,16 @@ public class RestaurantsGetByIdQueryHandler : IRestaurantGetByIdHandlerService
                   $"[{nameof(RestaurantsGetByIdQueryHandler)}].Handle - Início"
                   );
 
-            //var resultRestaurants = await _restaurantMongoDbRepository.GetAllAsync();
+            var resultRestaurant = await _restaurantMongoDbRepository.GetByIdAsync(request.Id);
 
-            //var mapperRestaurant = _mapper.Map<IEnumerable<RestaurantsGetQueryResponse>>(
-            //    source: filteredRestaurants.ToList());
+            var mapperRestaurant = _mapper.Map<RestaurantsGetByIdQueryResponse>(
+                source: resultRestaurant);
 
-            //_logger.LogInformation(
-            //     $"[{nameof(RestaurantsGetByIdQueryHandler)}].Handle - Fim"
-            //     );
+            _logger.LogInformation(
+                 $"[{nameof(RestaurantsGetByIdQueryHandler)}].Handle - Fim"
+                 );
 
-            //return mapperRestaurant;
-            return new RestaurantsGetByIdQueryResponse();
+            return mapperRestaurant;
         }
         catch (Exception ex)
         {

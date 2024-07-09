@@ -12,19 +12,17 @@ public class RestaurantRepository : IRestaurantMongoDbRepository
         _restaurant = database.GetCollection<RestaurantsMongoDb>("restaurants");
     }
 
-    //public async Task UpsertAsync(RestaurantsMongoDb restaurant)
-    //{
-    //    await _restaurant.InsertOneAsync(restaurant);
-    //}
-
-    //public async Task<IEnumerable<RestaurantsMongoDb>> GetAllAsync()
-    //{
-    //    await _restaurant.
-    //}
     public async Task UpsertAsync(RestaurantsMongoDb restaurant)
     {
+        var existingRestaurant = await _restaurant.Find(r => r.Name == restaurant.Name).FirstOrDefaultAsync();
+
+        if (existingRestaurant != null)
+        {
+            restaurant.Id = existingRestaurant.Id; // Preserve the original _id
+        }
+
         await _restaurant.ReplaceOneAsync(
-            filter: r => r.Name == restaurant.Name,
+            filter: r => r.Id == restaurant.Id,
             replacement: restaurant,
             options: new ReplaceOptions { IsUpsert = true });
     }
@@ -35,9 +33,9 @@ public class RestaurantRepository : IRestaurantMongoDbRepository
         return result;
     }
 
-    public async Task<RestaurantsMongoDb> GetByIdAsync(string id)
+    public async Task<RestaurantsMongoDb> GetByIdAsync(Guid id)
     {
-        var filter = Builders<RestaurantsMongoDb>.Filter.Eq(r => r.Name, id); //ALTERAR PARA ID
+        var filter = Builders<RestaurantsMongoDb>.Filter.Eq(restaurant => restaurant.Id, id); //ALTERAR PARA ID
         var result = await _restaurant.Find(filter).FirstOrDefaultAsync();
         return result;
     }

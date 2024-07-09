@@ -1,8 +1,8 @@
 ﻿namespace Domain.Queries.v1.Restaurants.GetById;
 
-public class RestaurantsGetByIdQuery
+public class RestaurantsGetByIdQuery : IRequest<RestaurantsGetByIdQueryResponse>
 {
-    public RestaurantsGetByIdQuery(string id) => Id = id;
+    public RestaurantsGetByIdQuery(Guid id) => Id = id;
 
-    public string Id { get; set; }
+    public Guid Id { get; set; }
 }
