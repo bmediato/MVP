@@ -4,4 +4,5 @@ public interface IUserMongoDbRepository
 {
     Task UpsertAsync(UserMongoDb request);
 
+    Task<UserMongoDb> GetByEmailAsync(string email);
 }

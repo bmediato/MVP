@@ -2,5 +2,5 @@
 
 public interface IUserSaveHandlerService
 {
-    public Task<UserSaveCommandResponse> SaveAsync(UserSaveCommand command);
+    Task<UserSaveCommandResponse> SaveAsync(UserSaveCommand request);
 }

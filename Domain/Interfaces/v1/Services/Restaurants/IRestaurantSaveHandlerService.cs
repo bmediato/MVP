@@ -2,5 +2,5 @@
 
 public interface IRestaurantSaveHandlerService
 {
-    public Task<RestaurantsSaveCommandResponse> SaveAsync(RestaurantsSaveCommand command);
+    Task<RestaurantsSaveCommandResponse> SaveAsync(RestaurantsSaveCommand request);
 }

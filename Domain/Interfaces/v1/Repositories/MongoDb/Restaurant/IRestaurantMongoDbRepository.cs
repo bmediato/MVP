@@ -5,4 +5,6 @@ public interface IRestaurantMongoDbRepository
     Task UpsertAsync(RestaurantsMongoDb request);
 
     Task<IEnumerable<RestaurantsMongoDb>> GetAllAsync();
+
+    Task<RestaurantsMongoDb> GetByIdAsync(string id);
 }
