@@ -6,6 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Commands\v1\Login\**" />
+    <EmbeddedResource Remove="Commands\v1\Login\**" />
+    <None Remove="Commands\v1\Login\**" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="13.0.1" />
 		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />

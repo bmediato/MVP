@@ -1,6 +1,6 @@
 ﻿namespace Domain.Queries.v1.Restaurants.Get;
 
-public class RestaurantsGetQueryHandler : IRestaurantGetHandlerService
+public class RestaurantsGetQueryHandler : IRequestHandler<RestaurantsGetQuery, IEnumerable<RestaurantsGetQueryResponse>>
 {
     private readonly IMapper _mapper;
     private readonly ILogger<RestaurantsGetQueryHandler> _logger;
@@ -15,7 +15,7 @@ public class RestaurantsGetQueryHandler : IRestaurantGetHandlerService
         _restaurantMongoDbRepository = restaurantMongoDbRepository;
     }
 
-    public async Task<IEnumerable<RestaurantsGetQueryResponse>> GetAsync(RestaurantsGetQuery request)
+    public async Task<IEnumerable<RestaurantsGetQueryResponse>> Handle(RestaurantsGetQuery request, CancellationToken cancellationToken)
     {
         try
         {
