@@ -1,6 +1,6 @@
 ﻿namespace Domain.Commands.v1.User.Save;
 
-public class UserSaveCommand 
+public class UserSaveCommand : IRequest<UserSaveCommandResponse>
 {
     public UserSaveCommand(string userName, string email, string password, string address, string phoneNumber)
     {

@@ -1,6 +1,6 @@
 ﻿namespace Domain.Commands.v1.User.Save;
 
-public class UserSaveCommandHandler : IUserSaveHandlerService
+public class UserSaveCommandHandler : IRequestHandler<UserSaveCommand, UserSaveCommandResponse>
 {
     private readonly IMapper _mapper;
     private readonly ILogger<UserSaveCommandHandler> _logger;
@@ -19,7 +19,7 @@ public class UserSaveCommandHandler : IUserSaveHandlerService
         _userValidator = userValidator;
     }
 
-    public async Task<UserSaveCommandResponse> SaveAsync(UserSaveCommand request)
+    public async Task<UserSaveCommandResponse> Handle(UserSaveCommand request, CancellationToken cancellationToken)
     {
         var response = new UserSaveCommandResponse();
 

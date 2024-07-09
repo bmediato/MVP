@@ -8,17 +8,17 @@
 [EnableCors]
 public class RestaurantsController : Controller
 {
-    private readonly IRestaurantService _restaurantService;
-
+    private readonly IMediator _mediator;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RestaurantsController"/> class!
     /// </summary>
-    /// <param name="IRestaurantSaveHandlerService">The RestaurantsService.</param>
+    /// <param name="IMediator">The RestaurantsService.</param>
     public RestaurantsController(
-        IRestaurantService restaurantService)
+        IMediator mediator)
     {
-        _restaurantService = restaurantService;
+ //       _restaurantService = restaurantService;
+        _mediator = mediator;
     }
 
     /// <summary>
@@ -32,15 +32,15 @@ public class RestaurantsController : Controller
     {
         try
         {
-            var restaurant = await _restaurantService.SaveAsync(new RestaurantsSaveCommand
-                (request.Name,
-                request.Category,
-                request.Description,
-                request.Address,
-                request.PhoneNumber,
-                request.Logo,
-                request.Dishes)
-                );
+            var restaurant = await _mediator.Send(new RestaurantsSaveCommand
+               (request.Name,
+               request.Category,
+               request.Description,
+               request.Address,
+               request.PhoneNumber,
+               request.Logo,
+               request.Dishes)
+               );
             return Ok(restaurant);
         }
         catch (Exception ex)
@@ -58,7 +58,7 @@ public class RestaurantsController : Controller
     {
         try
         {
-            var restaurant = await _restaurantService.GetAsync(new RestaurantsGetQuery(name, category));
+            var restaurant = await _mediator.Send(new RestaurantsGetQuery(name, category));
             return Ok(restaurant);
         }
         catch (Exception ex)
@@ -70,11 +70,11 @@ public class RestaurantsController : Controller
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(IEnumerable<RestaurantsGetQueryResponse>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> GetRestaurants(string id)
+    public async Task<IActionResult> GetRestaurants(Guid id)
     {
         try
         {
-            var restaurant = await _restaurantService.GetByIdAsync(new RestaurantsGetByIdQuery(id));
+            var restaurant = await _mediator.Send(new RestaurantsGetByIdQuery(id));
             return Ok(restaurant);
         }
         catch (Exception ex)

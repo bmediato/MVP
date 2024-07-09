@@ -22,7 +22,7 @@ public class UserSaveCommandValidator : AbstractValidator<UserSaveCommand>
 
         RuleFor(x => x.PhoneNumber)
                .NotEmpty().WithMessage("O número de telefone é obrigatório.")
-               .Matches(@"^\+\d{1,3}\s\d{1,14}$").WithMessage("Número de telefone inválido.");
+               .Matches(@"^\+\d{1,3}\s\d{9,14}$").WithMessage("Número de telefone inválido.");
 
     }
 }

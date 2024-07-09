@@ -1,6 +1,6 @@
 ﻿namespace Domain.Commands.v1.Restaurants.Save;
 
-public class RestaurantsSaveCommand
+public class RestaurantsSaveCommand : IRequest<RestaurantsSaveCommandResponse>
 {
     public RestaurantsSaveCommand(string name,
         RestaurantCategory category,
@@ -17,7 +17,9 @@ public class RestaurantsSaveCommand
         PhoneNumber = phoneNumber;
         Logo = logo;
         Dishes = dishes;
+        UserId = Guid.NewGuid();
     }
+    public Guid? UserId { get; set; }
     public string Name { get; set; }
     public RestaurantCategory Category { get; set; }
     public string Description { get; set; }

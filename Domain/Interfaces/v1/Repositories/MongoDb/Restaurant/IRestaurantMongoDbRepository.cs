@@ -6,5 +6,5 @@ public interface IRestaurantMongoDbRepository
 
     Task<IEnumerable<RestaurantsMongoDb>> GetAllAsync();
 
-    Task<RestaurantsMongoDb> GetByIdAsync(string id);
+    Task<RestaurantsMongoDb> GetByIdAsync(Guid id);
 }
