@@ -8,15 +8,15 @@
 [EnableCors]
 public class UserController : Controller
 {
-    private readonly IUserSaveHandlerService _userService;
+    private readonly IMediator _mediator;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UserController"/> class!
     /// </summary>
-    /// <param name="IUserService">The UserService.</param>
-    public UserController(IUserSaveHandlerService userService)
+    /// <param name="IMediator">The UserService.</param>
+    public UserController(IMediator mediator)
     {
-        _userService = userService;
+        _mediator = mediator;
     }
 
     /// <summary>
@@ -30,7 +30,7 @@ public class UserController : Controller
     {
         try
         {
-            var user = await _userService.SaveAsync(new UserSaveCommand(request.UserName, request.Email, request.Password, request.Address, request.PhoneNumber));
+            var user = await _mediator.Send(new UserSaveCommand(request.UserName, request.Email, request.Password, request.Address, request.PhoneNumber));
             return Ok(user);
         }
         catch (Exception ex)
@@ -40,18 +40,18 @@ public class UserController : Controller
     }
 
     [HttpPost("login")]
-    [ProducesResponseType(typeof(LoginCommandResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(LoginUserQueryResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> Login([FromBody] LoginCommand request)
+    public async Task<IActionResult> Login([FromBody] LoginUserQuery request)
     {
         try
         {
-            var token = await _authenticationService.AuthenticateAsync(request.Username, request.Password);
+            var token = await _mediator.Send(new LoginUserQuery(request.Email, request.Password));
             if (token == null)
                 return Unauthorized();
 
-            return Ok(new { Token = token });
+            return Ok(token);
         }
         catch (Exception ex)
         {
