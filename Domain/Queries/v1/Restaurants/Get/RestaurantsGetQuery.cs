@@ -2,12 +2,12 @@
 
 public class RestaurantsGetQuery
 {
-    public RestaurantsGetQuery(string? name, RestaurantCategory category)
+    public RestaurantsGetQuery(string? name, RestaurantCategory? category)
     {
         Name = name;
         Category = category;
     }
 
     public string? Name { get; set; }
-    public RestaurantCategory Category { get; set; }
+    public RestaurantCategory? Category { get; set; }
 }

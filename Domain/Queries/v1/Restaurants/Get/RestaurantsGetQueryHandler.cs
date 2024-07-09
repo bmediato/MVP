@@ -15,7 +15,7 @@ public class RestaurantsGetQueryHandler : IRestaurantGetHandlerService
         _restaurantMongoDbRepository = restaurantMongoDbRepository;
     }
 
-    public async Task<IEnumerable<RestaurantsGetQueryResponse>> GetAsync(RestaurantsGetQuery query)
+    public async Task<IEnumerable<RestaurantsGetQueryResponse>> GetAsync(RestaurantsGetQuery request)
     {
         try
         {
@@ -24,22 +24,29 @@ public class RestaurantsGetQueryHandler : IRestaurantGetHandlerService
                   );
 
             var resultRestaurants = await _restaurantMongoDbRepository.GetAllAsync();
+            var filteredRestaurants = resultRestaurants.AsQueryable();
 
-
-            if (request.Id != null)
+            if (request.Name != null)
             {
-                filteredNotifications = filteredNotifications.Where(notification =>
-                   notification.Employees.Any(employee => employee.Id == request.Id) ||
-                   notification.Template.ToLower().Contains(request.Id.ToLower()) ||
-                   notification.UserName.ToLower().Contains(request.Id.ToLower()));
+
+                filteredRestaurants = filteredRestaurants.Where(restaurant => restaurant.Name.ToLower()
+                .Contains(request.Name.ToLower()) || restaurant.Dishes.Any(dishes => dishes.Name.ToLower()
+                .Contains(request.Name) || dishes.Description.ToLower().Contains(request.Name)));
             }
 
-            if (request.Status != null)
+            if (request.Category != null)
             {
-                filteredNotifications = filteredNotifications.Where(notification => notification.Status == request.Status);
+                filteredRestaurants = filteredRestaurants.Where(restaurant => restaurant.Category == request.Category);
             }
 
-            var
+            var mapperRestaurant = _mapper.Map<IEnumerable<RestaurantsGetQueryResponse>>(
+                source: filteredRestaurants.ToList());
+
+            _logger.LogInformation(
+                  $"[{nameof(RestaurantsGetQueryHandler)}].Handle - Fim"
+                  );
+
+            return mapperRestaurant;
 
         }
         catch (Exception ex)

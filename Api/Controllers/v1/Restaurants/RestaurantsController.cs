@@ -1,22 +1,22 @@
-﻿using Domain.Enums.v1;
-
-namespace Api.Controllers.v1.Restaurants;
+﻿namespace Api.Controllers.v1.Restaurants;
 
 /// <summary>
 /// RestaurantsController
 /// </summary>
 [Route("api/v1/restaurants")]
 [ApiController]
+[EnableCors]
 public class RestaurantsController : Controller
 {
-    private readonly IRestaurantSaveHandlerService _restaurantService;
+    private readonly IRestaurantService _restaurantService;
 
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RestaurantsController"/> class!
     /// </summary>
     /// <param name="IRestaurantSaveHandlerService">The RestaurantsService.</param>
-    public RestaurantsController(IRestaurantSaveHandlerService restaurantService)
+    public RestaurantsController(
+        IRestaurantService restaurantService)
     {
         _restaurantService = restaurantService;
     }
@@ -50,8 +50,36 @@ public class RestaurantsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetRestaurants([FromQuery] string? name, [FromQuery] RestaurantCategory? category)
+    [ProducesResponseType(typeof(IEnumerable<RestaurantsGetQueryResponse>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> GetRestaurants(
+        [FromQuery] string? name = null,
+        [FromQuery] RestaurantCategory? category = null)
     {
+        try
+        {
+            var restaurant = await _restaurantService.GetAsync(new RestaurantsGetQuery(name, category));
+            return Ok(restaurant);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Houve um erro ao buscar os restaurantes! {ex.Message}" });
+        }
+    }
 
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(IEnumerable<RestaurantsGetQueryResponse>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> GetRestaurants(string id)
+    {
+        try
+        {
+            var restaurant = await _restaurantService.GetByIdAsync(new RestaurantsGetByIdQuery(id));
+            return Ok(restaurant);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"Houve um erro ao buscar o restaurante! {ex.Message}" });
+        }
     }
 }

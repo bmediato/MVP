@@ -16,23 +16,23 @@ public class RestaurantsSaveCommandHandler : IRestaurantSaveHandlerService
         _restaurantMongoDbRepository = restaurantMongoDbRepository;
     }
 
-    public async Task<RestaurantsSaveCommandResponse> SaveAsync(RestaurantsSaveCommand command)
+    public async Task<RestaurantsSaveCommandResponse> SaveAsync(RestaurantsSaveCommand request)
     {
         var response = new RestaurantsSaveCommandResponse();
 
         try
         {
             _logger.LogInformation(
-                    $"[{nameof(RestaurantsSaveCommandHandler)}].Handle - Início | Restaurant: {command.Name}"
+                    $"[{nameof(RestaurantsSaveCommandHandler)}].Handle - Início | Restaurant: {request.Name}"
                     );
 
             var restaurant = _mapper.Map<RestaurantsMongoDb>(
-            source: command);
+            source: request);
 
             await _restaurantMongoDbRepository.UpsertAsync(restaurant);
 
             _logger.LogInformation(
-              $"[{nameof(RestaurantsSaveCommandHandler)}].Handle - Fim | user: {command.Name}"
+              $"[{nameof(RestaurantsSaveCommandHandler)}].Handle - Fim | user: {request.Name}"
               );
 
             return response;

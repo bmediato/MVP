@@ -9,6 +9,7 @@ public class RestaurantProfile : Profile
         return new MapperConfiguration(cfg =>
         {
             cfg.CreateMap<RestaurantsSaveCommand, RestaurantsMongoDb>(); //command to mongo
+            cfg.CreateMap<RestaurantsMongoDb, RestaurantsGetQueryResponse>(); //mongo to query
         });
     }
 }
