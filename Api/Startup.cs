@@ -10,33 +10,49 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.Configure<JwtSettings>(Configuration.GetSection(nameof(JwtSettings)));
+        services.AddSingleton(sp => sp.GetRequiredService<IOptions<JwtSettings>>().Value);
+
+        // Configuração de Autenticação JWT
+        var key = Encoding.ASCII.GetBytes(Configuration["JwtSettings:Secret"]);
+        services.AddAuthentication(x =>
+        {
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(x =>
+        {
+            x.RequireHttpsMetadata = false;
+            x.SaveToken = true;
+            x.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+        });
         // Configurações de Banco de Dados
-        services.Configure<DatabaseConfig>(Configuration.GetSection(nameof(DatabaseConfig)));
+        services.Configure<DatabaseConfig>(Configuration.GetSection(nameof(AppSettings.DatabaseConfig)));
         services.AddSingleton<IDatabaseConfig>(sp => sp.GetRequiredService<IOptions<DatabaseConfig>>().Value);
 
         // Registro de Repositórios
         services.AddScoped<IUserMongoDbRepository, UserRepository>();
         services.AddScoped<IRestaurantMongoDbRepository, RestaurantRepository>();
 
-        // Registro de Serviços
-        services.AddScoped<IUserSaveHandlerService, UserSaveCommandHandler>();
-        services.AddScoped<IRestaurantSaveHandlerService, RestaurantsSaveCommandHandler>();
-        services.AddScoped<IRestaurantService, RestaurantService>();
-
         // Registro de Validadores
         services.AddTransient<IValidator<UserSaveCommand>, UserSaveCommandValidator>();
+        services.AddTransient<IValidator<RestaurantsSaveCommand>, RestaurantsSaveCommandValidator>();
 
         // Configuração do AutoMapper
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-        IMapper mapper = new UserProfile().Configuration().CreateMapper();
-        services.AddSingleton(mapper);
 
-        IMapper mapperRest = new RestaurantProfile().Configuration().CreateMapper();
-        services.AddSingleton(mapperRest);
-
-        //services.AddTransient<IUserMongoDbRepository, UserRepository>();
-        //services.AddTransient<IRestaurantMongoDbRepository, RestaurantRepository>();
-
+        // Registro dos Handlers do MediatR
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RestaurantsSaveCommandHandler).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(UserSaveCommandHandler).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RestaurantsGetQueryHandler).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RestaurantsGetByIdQueryHandler).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(LoginUserQueryHandler).Assembly));
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo
@@ -47,18 +63,8 @@ public class Startup
             });
         });
 
-        //services.AddCors(options =>
-        //{
-        //    options.AddPolicy("AllowAll",
-        //        policy =>
-        //        {
-        //            policy.WithOrigins("http://localhost:3000")
-        //                  .AllowAnyMethod()
-        //                  .AllowAnyHeader()
-        //                  .AllowCredentials();
-        //        });
-        //});
-        services.AddCors(o => o.AddPolicy("CorsPolicy", builder => {
+        services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
+        {
             builder
             .AllowAnyMethod()
             .AllowAnyHeader()
@@ -82,8 +88,10 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
-
+        
         app.UseCors("CorsPolicy");
+
+        app.UseAuthentication();
 
         app.UseAuthorization();
 
