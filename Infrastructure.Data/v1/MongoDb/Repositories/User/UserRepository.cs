@@ -16,4 +16,9 @@ public class UserRepository : IUserMongoDbRepository
     {
         await _user.InsertOneAsync(user);
     }
+
+    public async Task<UserMongoDb> GetByEmailAsync(string email)
+    {
+        return await _user.Find(u => u.Email == email).SingleOrDefaultAsync();
+    }
 }

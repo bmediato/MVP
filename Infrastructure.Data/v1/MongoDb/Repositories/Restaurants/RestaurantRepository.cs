@@ -34,4 +34,11 @@ public class RestaurantRepository : IRestaurantMongoDbRepository
         var result = await _restaurant.Find(FilterDefinition<RestaurantsMongoDb>.Empty).ToListAsync();
         return result;
     }
+
+    public async Task<RestaurantsMongoDb> GetByIdAsync(string id)
+    {
+        var filter = Builders<RestaurantsMongoDb>.Filter.Eq(r => r.Name, id); //ALTERAR PARA ID
+        var result = await _restaurant.Find(filter).FirstOrDefaultAsync();
+        return result;
+    }
 }
