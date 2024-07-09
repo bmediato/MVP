@@ -10,15 +10,23 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        // Configurações de Banco de Dados
         services.Configure<DatabaseConfig>(Configuration.GetSection(nameof(DatabaseConfig)));
         services.AddSingleton<IDatabaseConfig>(sp => sp.GetRequiredService<IOptions<DatabaseConfig>>().Value);
 
+        // Registro de Repositórios
         services.AddScoped<IUserMongoDbRepository, UserRepository>();
         services.AddScoped<IRestaurantMongoDbRepository, RestaurantRepository>();
+
+        // Registro de Serviços
         services.AddScoped<IUserSaveHandlerService, UserSaveCommandHandler>();
         services.AddScoped<IRestaurantSaveHandlerService, RestaurantsSaveCommandHandler>();
+        services.AddScoped<IRestaurantService, RestaurantService>();
+
+        // Registro de Validadores
         services.AddTransient<IValidator<UserSaveCommand>, UserSaveCommandValidator>();
 
+        // Configuração do AutoMapper
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         IMapper mapper = new UserProfile().Configuration().CreateMapper();
         services.AddSingleton(mapper);
@@ -26,8 +34,8 @@ public class Startup
         IMapper mapperRest = new RestaurantProfile().Configuration().CreateMapper();
         services.AddSingleton(mapperRest);
 
-        services.AddTransient<IUserMongoDbRepository, UserRepository>();
-        services.AddTransient<IRestaurantMongoDbRepository, RestaurantRepository>();
+        //services.AddTransient<IUserMongoDbRepository, UserRepository>();
+        //services.AddTransient<IRestaurantMongoDbRepository, RestaurantRepository>();
 
         services.AddSwaggerGen(c =>
         {
@@ -39,38 +47,45 @@ public class Startup
             });
         });
 
-        services.AddCors(options =>
-        {
-            options.AddPolicy(name: "development",
-                policy =>
-                {
-                    policy.WithOrigins("http://localhost:4200");
-                    policy.AllowAnyMethod();
-                    policy.AllowAnyHeader();
-                    policy.AllowCredentials();
-                });
-        });
+        //services.AddCors(options =>
+        //{
+        //    options.AddPolicy("AllowAll",
+        //        policy =>
+        //        {
+        //            policy.WithOrigins("http://localhost:3000")
+        //                  .AllowAnyMethod()
+        //                  .AllowAnyHeader()
+        //                  .AllowCredentials();
+        //        });
+        //});
+        services.AddCors(o => o.AddPolicy("CorsPolicy", builder => {
+            builder
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+            .WithOrigins("http://localhost:4200");
+        }));
 
         services.AddControllers();
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
         {
+            app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MvpGrao.Api v1"));
         }
 
         app.UseHttpsRedirection();
 
-        app.UseAuthorization();
-
         app.UseRouting();
 
-        app.UseCors("development");
+        app.UseCors("CorsPolicy");
+
+        app.UseAuthorization();
 
         app.UseEndpoints(endpoints =>
         {

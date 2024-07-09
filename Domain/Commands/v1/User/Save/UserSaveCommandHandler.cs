@@ -19,33 +19,33 @@ public class UserSaveCommandHandler : IUserSaveHandlerService
         _userValidator = userValidator;
     }
 
-    public async Task<UserSaveCommandResponse> SaveAsync(UserSaveCommand command)
+    public async Task<UserSaveCommandResponse> SaveAsync(UserSaveCommand request)
     {
         var response = new UserSaveCommandResponse();
 
         // valida os dados de entrada
-        ValidationResult validationResult = _userValidator.Validate(command);
+        ValidationResult validationResult = _userValidator.Validate(request);
 
         if (!validationResult.IsValid)
         {
-            _logger.LogWarning($"[{nameof(UserSaveCommandHandler)}].Handle - Validação falhou para o usuário: {command.UserName}");
+            _logger.LogWarning($"[{nameof(UserSaveCommandHandler)}].Handle - Validação falhou para o usuário: {request.UserName}");
             return response.Error(string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
         }
         try
         {
             _logger.LogInformation(
-                    $"[{nameof(UserSaveCommandHandler)}].Handle - Início | user: {command.UserName}"
+                    $"[{nameof(UserSaveCommandHandler)}].Handle - Início | user: {request.UserName}"
                     );
 
-            command.Password = BCrypt.Net.BCrypt.HashPassword(command.Password);
+            request.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
             var user = _mapper.Map<UserMongoDb>(
-            source: command);
+            source: request);
 
             await _userMongoDbRepository.UpsertAsync(user);
 
             _logger.LogInformation(
-              $"[{nameof(UserSaveCommandHandler)}].Handle - Fim | user: {command.UserName}"
+              $"[{nameof(UserSaveCommandHandler)}].Handle - Fim | user: {request.UserName}"
               );
 
             return response;
