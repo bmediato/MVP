@@ -18,7 +18,7 @@ public class RestaurantRepository : IRestaurantMongoDbRepository
 
         if (existingRestaurant != null)
         {
-            restaurant.Id = existingRestaurant.Id; // Preserve the original _id
+            restaurant.Id = existingRestaurant.Id;
         }
 
         await _restaurant.ReplaceOneAsync(
@@ -35,7 +35,7 @@ public class RestaurantRepository : IRestaurantMongoDbRepository
 
     public async Task<RestaurantsMongoDb> GetByIdAsync(Guid id)
     {
-        var filter = Builders<RestaurantsMongoDb>.Filter.Eq(restaurant => restaurant.Id, id); //ALTERAR PARA ID
+        var filter = Builders<RestaurantsMongoDb>.Filter.Eq(restaurant => restaurant.Id, id); 
         var result = await _restaurant.Find(filter).FirstOrDefaultAsync();
         return result;
     }

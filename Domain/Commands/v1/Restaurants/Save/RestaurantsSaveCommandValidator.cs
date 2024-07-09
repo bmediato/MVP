@@ -26,6 +26,9 @@ public class RestaurantsSaveCommandValidator : AbstractValidator<RestaurantsSave
         RuleFor(x => x.Logo)
             .NotEmpty().WithMessage("O logo é obrigatório.");
 
+        RuleFor(x => x.Banner)
+            .NotEmpty().WithMessage("O banner é obrigatório.");
+
         RuleForEach(x => x.Dishes).SetValidator(new DishesValidator());
     }
 }

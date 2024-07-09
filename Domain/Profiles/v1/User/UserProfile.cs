@@ -4,7 +4,6 @@ public class UserProfile : Profile
 {
     public UserProfile()
     {
-        // Command to Mongo
         CreateMap<UserSaveCommand, UserMongoDb>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId))
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))

@@ -23,7 +23,6 @@ public class UserSaveCommandHandler : IRequestHandler<UserSaveCommand, UserSaveC
     {
         var response = new UserSaveCommandResponse();
 
-        // valida os dados de entrada
         ValidationResult validationResult = _userValidator.Validate(request);
 
         if (!validationResult.IsValid)

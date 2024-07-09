@@ -13,11 +13,10 @@ public class RestaurantsController : Controller
     /// <summary>
     /// Initializes a new instance of the <see cref="RestaurantsController"/> class!
     /// </summary>
-    /// <param name="IMediator">The RestaurantsService.</param>
+    /// <param name="mediator">The mediatorService</param>
     public RestaurantsController(
         IMediator mediator)
     {
- //       _restaurantService = restaurantService;
         _mediator = mediator;
     }
 
@@ -39,6 +38,7 @@ public class RestaurantsController : Controller
                request.Address,
                request.PhoneNumber,
                request.Logo,
+               request.Banner,
                request.Dishes)
                );
             return Ok(restaurant);
@@ -49,6 +49,12 @@ public class RestaurantsController : Controller
         }
     }
 
+    /// <summary>
+    /// Find restaurants by name or category v1.
+    /// </summary>
+    /// <param name="name">The name restaurant.</param>
+    /// <param name="category">The category restaurant.</param>
+    /// <returns>The restaurants result.</returns>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<RestaurantsGetQueryResponse>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -67,6 +73,11 @@ public class RestaurantsController : Controller
         }
     }
 
+    /// <summary>
+    /// Find restaurant by id v1.
+    /// </summary>
+    /// <param name="id">The restaurant id.</param>
+    /// <returns>The restaurants result.</returns>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(IEnumerable<RestaurantsGetQueryResponse>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]

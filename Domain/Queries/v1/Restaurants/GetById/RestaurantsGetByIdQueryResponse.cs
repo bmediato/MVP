@@ -9,5 +9,6 @@ public class RestaurantsGetByIdQueryResponse
     public string Address { get; set; }
     public string PhoneNumber { get; set; }
     public string Logo { get; set; }
+    public string Banner { get; set; }
     public IEnumerable<Dishes> Dishes { get; set; }
 }

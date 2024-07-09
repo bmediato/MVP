@@ -8,6 +8,7 @@ public class RestaurantsSaveCommand : IRequest<RestaurantsSaveCommandResponse>
         string address,
         string phoneNumber,
         string logo,
+        string banner,
         IEnumerable<Dishes> dishes)
     {
         Name = name;
@@ -17,6 +18,7 @@ public class RestaurantsSaveCommand : IRequest<RestaurantsSaveCommandResponse>
         PhoneNumber = phoneNumber;
         Logo = logo;
         Dishes = dishes;
+        Banner = banner;
         UserId = Guid.NewGuid();
     }
     public Guid? UserId { get; set; }
@@ -26,6 +28,7 @@ public class RestaurantsSaveCommand : IRequest<RestaurantsSaveCommandResponse>
     public string Address { get; set; }
     public string PhoneNumber { get; set; }
     public string Logo { get; set; }
+    public string Banner { get; set; }
     public IEnumerable<Dishes> Dishes { get; set; }
 }
 public class Dishes

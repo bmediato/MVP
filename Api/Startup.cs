@@ -13,7 +13,7 @@ public class Startup
         services.Configure<JwtSettings>(Configuration.GetSection(nameof(JwtSettings)));
         services.AddSingleton(sp => sp.GetRequiredService<IOptions<JwtSettings>>().Value);
 
-        // Configuração de Autenticação JWT
+
         var key = Encoding.ASCII.GetBytes(Configuration["JwtSettings:Secret"]);
         services.AddAuthentication(x =>
         {
@@ -32,22 +32,22 @@ public class Startup
                 ValidateAudience = false
             };
         });
-        // Configurações de Banco de Dados
+ 
         services.Configure<DatabaseConfig>(Configuration.GetSection(nameof(AppSettings.DatabaseConfig)));
         services.AddSingleton<IDatabaseConfig>(sp => sp.GetRequiredService<IOptions<DatabaseConfig>>().Value);
 
-        // Registro de Repositórios
+
         services.AddScoped<IUserMongoDbRepository, UserRepository>();
         services.AddScoped<IRestaurantMongoDbRepository, RestaurantRepository>();
 
-        // Registro de Validadores
+
         services.AddTransient<IValidator<UserSaveCommand>, UserSaveCommandValidator>();
         services.AddTransient<IValidator<RestaurantsSaveCommand>, RestaurantsSaveCommandValidator>();
 
-        // Configuração do AutoMapper
+
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-        // Registro dos Handlers do MediatR
+
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RestaurantsSaveCommandHandler).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(UserSaveCommandHandler).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RestaurantsGetQueryHandler).Assembly));

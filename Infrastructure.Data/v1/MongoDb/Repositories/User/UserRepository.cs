@@ -18,7 +18,7 @@ public class UserRepository : IUserMongoDbRepository
 
         if (existingUser != null)
         {
-            user.Id = existingUser.Id; // Preserve the original _id
+            user.Id = existingUser.Id; 
         }
 
         await _user.ReplaceOneAsync(

@@ -13,7 +13,7 @@ public class UserController : Controller
     /// <summary>
     /// Initializes a new instance of the <see cref="UserController"/> class!
     /// </summary>
-    /// <param name="IMediator">The UserService.</param>
+    /// <param name="mediator">The mediatorService.</param>
     public UserController(IMediator mediator)
     {
         _mediator = mediator;
@@ -39,6 +39,10 @@ public class UserController : Controller
         }
     }
 
+    /// <summary>
+    /// Login users v1.
+    /// </summary>
+    /// <param name="request">The User request</param>
     [HttpPost("login")]
     [ProducesResponseType(typeof(LoginUserQueryResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]

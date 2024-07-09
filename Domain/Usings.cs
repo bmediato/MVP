@@ -8,6 +8,7 @@ global using Domain.Enums.v1;
 global using Domain.Interfaces.v1.Repositories.MongoDb.Restaurant;
 global using Domain.Interfaces.v1.Repositories.MongoDb.User;
 global using Domain.Queries.v1.Restaurants.Get;
+global using Domain.Queries.v1.Restaurants.GetById;
 global using FluentValidation;
 global using FluentValidation.Results;
 global using MediatR;
