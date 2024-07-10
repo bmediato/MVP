@@ -2,8 +2,13 @@
 
 public enum RestaurantCategory
 {
-    FastFood,
-    Dessert,
-    Pizza,
-    Vegetarian
+    Brazilian,
+    Mediterranean,
+    ITalian,
+    Asian,
+    Mexican,
+    Burger,
+    Pizzeria,
+    IceCream,
+    PanchakeHouse
 }
