@@ -49,6 +49,9 @@ public class DishesValidator : AbstractValidator<Dishes>
             .NotEmpty().WithMessage("O preço é obrigatório.")
             .Matches(@"^\d+(\.\d{1,2})?$").WithMessage("O preço deve ser um valor numérico com até duas casas decimais.");
 
+        RuleFor(x => x.FoodType)
+           .IsInEnum().WithMessage("Tipo de comida inválida.");
+
         RuleFor(x => x.Image)
             .NotEmpty().WithMessage("A imagem é obrigatória.");
     }
