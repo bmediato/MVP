@@ -16,7 +16,7 @@ public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, LoginUserQu
         var response = new LoginUserQueryResponse();
         var user = await _userMongoDbRepository.GetByEmailAsync(request.Email);
 
-        if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
+        if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.password))
         {
             return response.Error("Invalid email or password");
         }
@@ -26,8 +26,8 @@ public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, LoginUserQu
         {
             Subject = new ClaimsIdentity(new[]
             {
-                new Claim(ClaimTypes.Name, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim(ClaimTypes.Name, user.email),
+                new Claim(ClaimTypes.NameIdentifier, user.id.ToString())
             }),
             Expires = DateTime.UtcNow.AddHours(_jwtSettings.ExpiryMinutes),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
@@ -35,6 +35,8 @@ public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, LoginUserQu
         var token = tokenHandler.CreateToken(tokenDescriptor);
 
         response.Token = tokenHandler.WriteToken(token);
+        response.Name = user.userName;
+        response.Address = user.address;
 
         return response;
     }

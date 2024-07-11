@@ -19,9 +19,9 @@ public class RestaurantsSaveCommand : IRequest<RestaurantsSaveCommandResponse>
         Logo = logo;
         Dishes = dishes;
         Banner = banner;
-        UserId = Guid.NewGuid();
+        Id = Guid.NewGuid();
     }
-    public Guid? UserId { get; set; }
+    public Guid? Id { get; set; }
     public string Name { get; set; }
     public RestaurantCategory Category { get; set; }
     public string Description { get; set; }
@@ -33,9 +33,9 @@ public class RestaurantsSaveCommand : IRequest<RestaurantsSaveCommandResponse>
 }
 public class Dishes
 {
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public string Price { get; set; }
-    public Foodtype FoodType { get; set; }
-    public string Image { get; set; }
+    public string name { get; set; }
+    public string description { get; set; }
+    public string price { get; set; }
+    public Foodtype foodType { get; set; }
+    public string image { get; set; }
 }

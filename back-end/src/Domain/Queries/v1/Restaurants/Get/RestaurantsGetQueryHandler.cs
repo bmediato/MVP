@@ -29,14 +29,14 @@ public class RestaurantsGetQueryHandler : IRequestHandler<RestaurantsGetQuery, I
             if (request.Name != null)
             {
 
-                filteredRestaurants = filteredRestaurants.Where(restaurant => restaurant.Name.ToLower()
-                .Contains(request.Name.ToLower()) || restaurant.Dishes.Any(dishes => dishes.Name.ToLower()
-                .Contains(request.Name) || dishes.Description.ToLower().Contains(request.Name)));
+                filteredRestaurants = filteredRestaurants.Where(restaurant => restaurant.name.ToLower()
+                .Contains(request.Name.ToLower()) || restaurant.dishes.Any(dishes => dishes.name.ToLower()
+                .Contains(request.Name.ToLower()) || dishes.description.ToLower().Contains(request.Name)));
             }
 
             if (request.Category != null)
             {
-                filteredRestaurants = filteredRestaurants.Where(restaurant => restaurant.Category == request.Category);
+                filteredRestaurants = filteredRestaurants.Where(restaurant => restaurant.category == request.Category);
             }
 
             var mapperRestaurant = _mapper.Map<IEnumerable<RestaurantsGetQueryResponse>>(

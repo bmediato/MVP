@@ -14,22 +14,22 @@ public class UserRepository : IUserMongoDbRepository
 
     public async Task UpsertAsync(UserMongoDb user)
     {
-        var existingUser = await _user.Find(u => u.Email == user.Email).FirstOrDefaultAsync();
+        var existingUser = await _user.Find(u => u.email == user.email).FirstOrDefaultAsync();
 
         if (existingUser != null)
         {
-            user.Id = existingUser.Id; 
+            user.id = existingUser.id; 
         }
 
         await _user.ReplaceOneAsync(
-            filter: u => u.Email == user.Email,
+            filter: u => u.email == user.email,
             replacement: user,
             options: new ReplaceOptions { IsUpsert = true });
     }
 
     public async Task<UserMongoDb> GetByEmailAsync(string email)
     {
-        var filter = Builders<UserMongoDb>.Filter.Eq(user => user.Email, email); 
+        var filter = Builders<UserMongoDb>.Filter.Eq(user => user.email, email); 
         var result = await _user.Find(filter).FirstOrDefaultAsync();
         return result;
     }

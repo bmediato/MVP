@@ -37,22 +37,22 @@ public class DishesValidator : AbstractValidator<Dishes>
 {
     public DishesValidator()
     {
-        RuleFor(x => x.Name)
+        RuleFor(x => x.name)
             .NotEmpty().WithMessage("O nome do prato é obrigatório.")
             .Length(3, 100).WithMessage("O nome do prato deve ter entre 3 e 100 caracteres.");
 
-        RuleFor(x => x.Description)
+        RuleFor(x => x.description)
             .NotEmpty().WithMessage("A descrição do prato é obrigatória.")
             .MaximumLength(500).WithMessage("A descrição do prato não pode ter mais de 500 caracteres.");
 
-        RuleFor(x => x.Price)
+        RuleFor(x => x.price)
             .NotEmpty().WithMessage("O preço é obrigatório.")
             .Matches(@"^\d+(\.\d{1,2})?$").WithMessage("O preço deve ser um valor numérico com até duas casas decimais.");
 
-        RuleFor(x => x.FoodType)
+        RuleFor(x => x.foodType)
            .IsInEnum().WithMessage("Tipo de comida inválida.");
 
-        RuleFor(x => x.Image)
+        RuleFor(x => x.image)
             .NotEmpty().WithMessage("A imagem é obrigatória.");
     }
 }

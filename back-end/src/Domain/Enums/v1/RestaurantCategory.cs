@@ -4,7 +4,7 @@ public enum RestaurantCategory
 {
     Brazilian,
     Mediterranean,
-    ITalian,
+    Italian,
     Asian,
     Mexican,
     Burger,
